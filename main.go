@@ -40,7 +40,7 @@ func init() {
 
 func main() {
 	c := cron.New()
-	c.AddFunc("@every 15s", SendDailyAlmanaxMessage)
+	c.AddFunc("0 30 0 * * *", SendDailyAlmanaxMessage)
 	c.Start()
 
 	router := mux.NewRouter()
