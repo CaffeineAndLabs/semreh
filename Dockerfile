@@ -5,8 +5,10 @@ RUN apk add --update --no-cache git ca-certificates
 WORKDIR /src
 COPY . ./
 
-RUN CGO_ENABLED=0 go build \
+RUN GIT_COMMIT=$(git rev-list -1 HEAD) && \
+    CGO_ENABLED=0 go build \
     -installsuffix 'static' \
+    -ldflags "-X main.GitCommit=$GIT_COMMIT" \
     -o /app .
 
 FROM scratch AS final
