@@ -49,7 +49,6 @@ func getDailyAlmanax() AlmanaxEvent {
 	now := time.Now()
 	_, month, day := now.Date()
 	today := fmt.Sprintf("%02d/%02d", day, month)
-	fmt.Println(today)
 	event := cal[today]
 
 	return event

@@ -36,6 +36,9 @@ func init() {
 		fmt.Printf("Commit: %s\n", GitCommit)
 		os.Exit(0)
 	}
+
+	// Send the daily Almanax at the start of the process
+	SendDailyAlmanaxMessage()
 }
 
 func main() {
