@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/bwmarrin/discordgo"
@@ -20,10 +21,12 @@ func formatAlmanaxDailyMessage(todayAlmanax AlmanaxEvent) *discordgo.MessageEmbe
 	}
 
 	msgFields := []*discordgo.MessageEmbedField{msgFieldOffering, msgFieldEffect}
+
+	imageURL := fmt.Sprintf("http://staticns.ankama.com/dofus/www/game/items/200/%s.w75h75.png", todayAlmanax.ItemImage)
 	msgImage := &discordgo.MessageEmbedImage{
-		URL:    "http://staticns.ankama.com/comm/news/dofus/www/08_2012/carrou-almanax1.jpg",
-		Width:  20,
-		Height: 20,
+		URL:    imageURL,
+		Width:  75,
+		Height: 75,
 	}
 
 	message := &discordgo.MessageEmbed{
