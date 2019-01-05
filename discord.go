@@ -54,10 +54,10 @@ func SendDailyAlmanaxMessage() {
 		log.Fatal(err)
 	}
 
+	log.Println("Sending daily Almanax message to Discord...")
 	message := formatAlmanaxDailyMessage(todayAlmanax)
 	_, err = dg.ChannelMessageSendEmbed(Conf.DiscordChannel, message)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }

@@ -29,6 +29,7 @@ func init() {
 	}
 
 	version := flag.Bool("v", false, "Print the version of the application")
+	notifAtStart := flag.Bool("almanax-at-start", false, "Force to send Almanax notification at start")
 	flag.Parse()
 
 	// Print version when -v is used
@@ -37,13 +38,16 @@ func init() {
 		os.Exit(0)
 	}
 
-	// Send the daily Almanax at the start of the process
-	SendDailyAlmanaxMessage()
+	if *notifAtStart {
+		SendDailyAlmanaxMessage()
+	}
 }
 
 func main() {
+	log.Println("semreh started")
+
 	c := cron.New()
-	c.AddFunc("0 30 0 * * *", SendDailyAlmanaxMessage)
+	c.AddFunc("0 1 0 * * *", SendDailyAlmanaxMessage)
 	c.Start()
 
 	router := mux.NewRouter()
