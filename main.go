@@ -12,22 +12,19 @@ import (
 	"github.com/robfig/cron"
 )
 
-type Config struct {
-	DiscordToken   string `split_words:"true",required:"true"`
-	DiscordChannel string `split_words:"true",required:"true"`
-}
-
 var (
 	Conf      Config
 	GitCommit string
 )
 
 func init() {
+	// Environment variable
 	err := envconfig.Process("SEMREH", &Conf)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
+	// CLI
 	version := flag.Bool("v", false, "Print the version of the application")
 	notifAtStart := flag.Bool("almanax-at-start", false, "Force to send Almanax notification at start")
 	flag.Parse()
@@ -47,7 +44,8 @@ func main() {
 	log.Println("semreh started")
 
 	c := cron.New()
-	c.AddFunc("0 1 0 * * *", SendDailyAlmanaxMessage)
+	cronTime := fmt.Sprintf("0 %s %s * * *", Conf.AlmanaxDailyReportMinute, Conf.AlmanaxDailyReportHour)
+	c.AddFunc(cronTime, SendDailyAlmanaxMessage)
 	c.Start()
 
 	router := mux.NewRouter()
