@@ -36,9 +36,9 @@ func truncDescription(s string) string {
 	return s
 }
 
-func getLastNews(n int) []*FeedItem {
+func getLastNews(feedURL string, n int) []*FeedItem {
 	fp := gofeed.NewParser()
-	feed, _ := fp.ParseURL("http://www.dofus.com/fr/rss/news.xml")
+	feed, _ := fp.ParseURL(feedURL)
 	var lastNews []*FeedItem
 
 	for i := 0; i <= n-1; i++ {

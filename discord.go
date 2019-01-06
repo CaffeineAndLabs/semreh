@@ -68,9 +68,9 @@ func formatAlmanaxDailyMessage(todayAlmanax AlmanaxEvent) *discordgo.MessageEmbe
 	return message
 }
 
-func cronRSSNews() {
+func cronRSSNews(urlFeed string) {
 	var newsToSend []*FeedItem
-	lastNews := getLastNews(10)
+	lastNews := getLastNews(urlFeed, 10)
 	now := time.Now()
 
 	for _, new := range lastNews {
@@ -82,8 +82,8 @@ func cronRSSNews() {
 	sendRSSMessage(newsToSend)
 }
 
-func sendLastNNews(n int) {
-	lastNews := getLastNews(n)
+func sendLastNNews(urlFeed string, n int) {
+	lastNews := getLastNews(urlFeed, n)
 
 	sendRSSMessage(lastNews)
 }
