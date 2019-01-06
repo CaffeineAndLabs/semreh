@@ -27,6 +27,7 @@ func init() {
 	// CLI
 	version := flag.Bool("v", false, "Print the version of the application")
 	notifAtStart := flag.Bool("almanax-at-start", false, "Force to send Almanax notification at start")
+	bumpDofusNews := flag.Int("dofus-news", 0, "Send to discord N last news from Dofus news RSS")
 	flag.Parse()
 
 	// Print version when -v is used
@@ -38,14 +39,17 @@ func init() {
 	if *notifAtStart {
 		SendDailyAlmanaxMessage()
 	}
+
+	sendLastNNews(*bumpDofusNews)
 }
 
 func main() {
 	log.Println("semreh started")
 
 	c := cron.New()
-	cronTime := fmt.Sprintf("0 %s %s * * *", Conf.AlmanaxDailyReportMinute, Conf.AlmanaxDailyReportHour)
-	c.AddFunc(cronTime, SendDailyAlmanaxMessage)
+	almanaxCronTime := fmt.Sprintf("0 %s %s * * *", Conf.AlmanaxDailyReportMinute, Conf.AlmanaxDailyReportHour)
+	c.AddFunc(almanaxCronTime, SendDailyAlmanaxMessage)
+	c.AddFunc("0 * * * * *", cronRSSNews)
 	c.Start()
 
 	router := mux.NewRouter()
