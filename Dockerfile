@@ -7,6 +7,7 @@ COPY . ./
 
 RUN GIT_COMMIT=$(git rev-list -1 HEAD) && \
     CGO_ENABLED=0 go build \
+    -mod=vendor \
     -installsuffix 'static' \
     -ldflags "-X main.GitCommit=$GIT_COMMIT" \
     -o /app .
