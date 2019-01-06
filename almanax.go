@@ -46,9 +46,14 @@ func getAlmanaxCalendar() AlmanaxCalendar {
 
 func getDailyAlmanax() AlmanaxEvent {
 	cal := getAlmanaxCalendar()
-	now := time.Now()
+	dofusServerLoc, err := time.LoadLocation("Europe/Paris")
+	if err != nil {
+		log.Fatal(err)
+	}
+	now := time.Now().In(dofusServerLoc)
 	_, month, day := now.Date()
 	today := fmt.Sprintf("%02d/%02d", day, month)
+
 	event := cal[today]
 
 	return event
