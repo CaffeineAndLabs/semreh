@@ -26,8 +26,8 @@ func init() {
 
 	// CLI
 	version := flag.Bool("v", false, "Print the version of the application")
-	notifAtStart := flag.Bool("almanax-at-start", false, "Force to send Almanax notification at start")
-	bumpDofusNews := flag.Int("dofus-news", 0, "Send to discord N last news from Dofus news RSS")
+	notifAlmanax := flag.Bool("notif-almanax", false, "Force to send Almanax notification at start")
+	notifDofusNews := flag.Int("notif-dofus-news", 0, "Send to discord N last news from Dofus news RSS")
 	flag.Parse()
 
 	// Print version when -v is used
@@ -36,11 +36,15 @@ func init() {
 		os.Exit(0)
 	}
 
-	if *notifAtStart {
+	if *notifAlmanax {
 		SendDailyAlmanaxMessage()
+		os.Exit(0)
 	}
 
-	sendLastNNews(*bumpDofusNews)
+	if *notifDofusNews > 0 {
+		sendLastNNews(*notifDofusNews)
+		os.Exit(0)
+	}
 }
 
 func main() {
