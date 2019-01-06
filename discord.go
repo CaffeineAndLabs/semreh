@@ -7,6 +7,21 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+func newDiscordSession() *discordgo.Session {
+	// Create a new Discord session using the provided bot token.
+	session, err := discordgo.New("Bot " + Conf.DiscordToken)
+	if err != nil {
+		log.Fatal("error creating Discord session,", err)
+	}
+
+	err = session.Open()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return session
+}
+
 func formatAlmanaxDailyMessage(todayAlmanax AlmanaxEvent) *discordgo.MessageEmbed {
 	msgFieldEffect := &discordgo.MessageEmbedField{
 		Name:   "Effet",
@@ -41,22 +56,12 @@ func formatAlmanaxDailyMessage(todayAlmanax AlmanaxEvent) *discordgo.MessageEmbe
 func SendDailyAlmanaxMessage() {
 	todayAlmanax := getDailyAlmanax()
 
-	// Create a new Discord session using the provided bot token.
-	dg, err := discordgo.New("Bot " + Conf.DiscordToken)
-	if err != nil {
-		log.Fatal("error creating Discord session,", err)
-		return
-	}
-	defer dg.Close()
-
-	err = dg.Open()
-	if err != nil {
-		log.Fatal(err)
-	}
+	session := newDiscordSession()
+	defer session.Close()
 
 	log.Println("Sending daily Almanax message to Discord...")
 	message := formatAlmanaxDailyMessage(todayAlmanax)
-	_, err = dg.ChannelMessageSendEmbed(Conf.DiscordChannel, message)
+	_, err := session.ChannelMessageSendEmbed(Conf.DiscordChannel, message)
 	if err != nil {
 		log.Fatal(err)
 	}
