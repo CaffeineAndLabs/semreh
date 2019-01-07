@@ -9,6 +9,7 @@ import (
 )
 
 func newDiscordSession() *discordgo.Session {
+	log.Println("New Discord session ...")
 	// Create a new Discord session using the provided bot token.
 	session, err := discordgo.New("Bot " + Conf.DiscordToken)
 	if err != nil {
@@ -75,11 +76,14 @@ func cronRSSNews(urlFeed string) {
 
 	for _, new := range lastNews {
 		if now.Sub(*new.PublishedParsed) < time.Second*60 {
+			log.Println("New rss article to push ...")
 			newsToSend = append(newsToSend, new)
 		}
 	}
 
-	sendRSSMessage(newsToSend)
+	if len(newsToSend) > 0 {
+		sendRSSMessage(newsToSend)
+	}
 }
 
 func sendLastNNews(urlFeed string, n int) {
