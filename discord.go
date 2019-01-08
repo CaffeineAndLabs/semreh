@@ -75,7 +75,7 @@ func cronRSSNews(urlFeed string) {
 	now := time.Now()
 
 	for _, new := range lastNews {
-		if now.Sub(*new.PublishedParsed) < time.Second*60 {
+		if now.Sub(new.PublishedParsed.Local()) < time.Second*60 {
 			log.Println("New rss article to push ...")
 			newsToSend = append(newsToSend, new)
 		}
